@@ -1,11 +1,16 @@
 package com.dimqa.geometry.figures;
 
-public class Square {
-    public static void printSquareArea(double side) {
-        System.out.printf("Площадь квадрата со стороной %f = %f%n", side, squareArea(side));
+public record Square(double side) {
+
+    public static void printSquareArea(Square s) {
+        System.out.printf("Площадь квадрата со стороной %f = %f%n", s.side, s.area());
     }
 
-    private static double squareArea(double side) {
+    public double area() {
         return side * side;
+    }
+
+    public double perimeter() {
+        return 4 * side;
     }
 }
