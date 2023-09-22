@@ -35,15 +35,6 @@ public class GroupCreationTests {
         driver.findElement(By.linkText("group page")).click();
     }
 
-    private boolean isElementPresent(By locator) {
-        try {
-            driver.findElement(locator);
-            return true;
-        } catch (NoSuchElementException exception) {
-            return false;
-        }
-    }
-
     @Test
     public void canCreateGroupWithEmptyName() {
         if (!isElementPresent(By.name("new"))) {
@@ -55,5 +46,14 @@ public class GroupCreationTests {
         driver.findElement(By.name("group_footer")).sendKeys("");
         driver.findElement(By.name("submit")).click();
         driver.findElement(By.linkText("group page")).click();
+    }
+
+    private boolean isElementPresent(By locator) {
+        try {
+            driver.findElement(locator);
+            return true;
+        } catch (NoSuchElementException exception) {
+            return false;
+        }
     }
 }
