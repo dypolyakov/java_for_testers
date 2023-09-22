@@ -2,17 +2,23 @@ import java.io.File;
 
 public class Hello {
     public static void main(String[] args) {
-        System.out.println("Hello, World!");
+        try {
+            int z = calculate();
+            System.out.println(z);
+        } catch (ArithmeticException exception) {
+            System.out.println(exception.getMessage());
+        }
+    }
 
-        System.out.println(2 + 2);
-        System.out.println(2 * 2);
-        System.out.println(2 - 2);
-        System.out.println(2 / 2);
-        System.out.println(2 + 2 * 2);
-        System.out.println((2 + 2) * 2);
+    private static int calculate() {
+        int x = 1;
+        int y = 0;
+        int z = divide(x, y);
+        return z;
+    }
 
-        var configFile = new File("sandbox/build.gradle");
-        System.out.println(configFile.getAbsolutePath());
-        System.out.println(configFile.exists());
+    private static int divide(int x, int y) {
+        int z = x / y;
+        return z;
     }
 }
