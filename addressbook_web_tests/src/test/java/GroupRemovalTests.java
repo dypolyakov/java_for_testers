@@ -18,9 +18,7 @@ public class GroupRemovalTests {
         driver.findElement(By.name("pass")).sendKeys("secret");
         driver.findElement(By.xpath("//input[@value='Login']")).click();
     }
-
-
-
+    
     @AfterEach
     public void tearDown() {
         driver.findElement(By.linkText("Logout")).click();
