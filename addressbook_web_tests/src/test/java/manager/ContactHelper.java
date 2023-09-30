@@ -35,4 +35,35 @@ public class ContactHelper extends HelperBase {
     private void initContactCreation() {
         click(By.linkText("add new"));
     }
+
+    public boolean isContactPresent() {
+        openContactsPage();
+        return manager.isElementPresent(By.name("entry"));
+    }
+
+    private void openContactsPage() {
+        if (!manager.isElementPresent(By.id("maintable"))) {
+            click(By.linkText("home"));
+        }
+    }
+
+    public void removeContact() {
+        openContactsPage();
+        selectContact();
+        removeSelectedContact();
+        confirmRemoval();
+        openContactsPage();
+    }
+
+    private void confirmRemoval() {
+        manager.driver.switchTo().alert().accept();
+    }
+
+    private void removeSelectedContact() {
+        click(By.xpath("//input[@value='Delete']"));
+    }
+
+    private void selectContact() {
+        click(By.name("selected[]"));
+    }
 }
