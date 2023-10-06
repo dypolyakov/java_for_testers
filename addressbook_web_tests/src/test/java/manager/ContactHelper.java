@@ -36,11 +36,6 @@ public class ContactHelper extends HelperBase {
         click(By.linkText("add new"));
     }
 
-    public boolean isContactPresent() {
-        openContactsPage();
-        return manager.isElementPresent(By.name("entry"));
-    }
-
     private void openContactsPage() {
         if (!manager.isElementPresent(By.id("maintable"))) {
             click(By.linkText("home"));
