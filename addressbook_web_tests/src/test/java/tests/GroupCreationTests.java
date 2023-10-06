@@ -6,6 +6,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 public class GroupCreationTests extends TestBase {
@@ -38,19 +39,24 @@ public class GroupCreationTests extends TestBase {
     @ParameterizedTest
     @MethodSource("GroupProvider")
     public void canCreateMultipleGroups(GroupData group) {
-        int groupCount = app.groups().getCount();
+        List<GroupData> oldGroups = app.groups().getList();
         app.groups().createGroup(group);
-        int newGroupCount = app.groups().getCount();
-        Assertions.assertEquals(groupCount + 1, newGroupCount);
+        List<GroupData> newGroups = app.groups().getList();
+        Comparator<GroupData> compareById = Comparator.comparingInt(o -> Integer.parseInt(o.id()));
+        newGroups.sort(compareById);
+        List<GroupData> expectedGroups = new ArrayList<>(oldGroups);
+        expectedGroups.add(group.withId(newGroups.get((newGroups.size()) - 1).id()).withHeader("").withFooter(""));
+        expectedGroups.sort(compareById);
+        Assertions.assertEquals(expectedGroups, newGroups);
     }
 
     @ParameterizedTest
     @MethodSource("negativeGroupProvider")
     public void cannotCreateGroup(GroupData group) {
-        int groupCount = app.groups().getCount();
+        List<GroupData> oldGroups = app.groups().getList();
         app.groups().createGroup(group);
-        int newGroupCount = app.groups().getCount();
-        Assertions.assertEquals(groupCount, newGroupCount);
+        List<GroupData> newGroups = app.groups().getList();
+        Assertions.assertEquals(newGroups, oldGroups);
     }
 
 }

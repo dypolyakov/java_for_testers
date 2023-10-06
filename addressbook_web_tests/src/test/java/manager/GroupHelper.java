@@ -96,6 +96,7 @@ public class GroupHelper extends HelperBase {
     }
 
     public List<GroupData> getList() {
+        openGroupsPage();
         List<GroupData> groups = new ArrayList<>();
         List<WebElement> elements = manager.driver.findElements(By.className("group"));
         for (WebElement element: elements) {
