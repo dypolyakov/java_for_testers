@@ -17,7 +17,13 @@ public class ContactCreationTests extends TestBase {
                 for (String address : List.of("", "55 West 81st Street, Upper West Side")) {
                     for (String email : List.of("", "patrick@bateman.com")) {
                         for (String phone : List.of("", "917-941-0426")) {
-                            result.add(new ContactData(firstName, lastName, address, email, phone));
+                            result.add(new ContactData()
+                                    .withFirstName(firstName)
+                                    .withLastName(lastName)
+                                    .withAddress(address)
+                                    .withEmail(email)
+                                    .withPhone(phone)
+                            );
                         }
                     }
                 }

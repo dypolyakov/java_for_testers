@@ -4,6 +4,7 @@ import model.GroupData;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class GroupHelper extends HelperBase {
@@ -20,16 +21,16 @@ public class GroupHelper extends HelperBase {
         returnToGroupsPage();
     }
 
-    public void removeGroup() {
+    public void removeGroup(GroupData group) {
         openGroupsPage();
-        selectGroup();
+        selectGroup(group);
         removeSelectedGroups();
         returnToGroupsPage();
     }
 
     public void modifyGroup(GroupData group) {
         openGroupsPage();
-        selectGroup();
+        selectGroup(null);
         initGroupModification();
         fillGroupForm(group);
         submitGroupModification();
@@ -72,8 +73,8 @@ public class GroupHelper extends HelperBase {
         click(By.name("edit"));
     }
 
-    private void selectGroup() {
-        click(By.name("selected[]"));
+    private void selectGroup(GroupData group) {
+        click(By.xpath(String.format("//input[@value='%s']", group.id())));
     }
 
     public int getCount() {
@@ -92,5 +93,16 @@ public class GroupHelper extends HelperBase {
         for (WebElement checkbox : checkBoxes) {
             checkbox.click();
         }
+    }
+
+    public List<GroupData> getList() {
+        List<GroupData> groups = new ArrayList<>();
+        List<WebElement> elements = manager.driver.findElements(By.className("group"));
+        for (WebElement element: elements) {
+            String id = element.findElement(By.name("selected[]")).getAttribute("value");
+            String name = element.getText();
+            groups.add(new GroupData().withId(id).withName(name));
+        }
+        return groups;
     }
 }

@@ -15,7 +15,7 @@ public class GroupCreationTests extends TestBase {
         for (String name : List.of("", "group name")) {
             for (String header : List.of("", "group header")) {
                 for (String footer : List.of("", "group footer")) {
-                    result.add(new GroupData(name, header, footer));
+                    result.add(new GroupData().withName(name).withHeader(header).withFooter(footer));
                 }
             }
         }
