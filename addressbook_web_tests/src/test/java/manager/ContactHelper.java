@@ -54,6 +54,14 @@ public class ContactHelper extends HelperBase {
         openContactsPage();
     }
 
+    public void modifyContact(ContactData contact, ContactData modifiedContact) {
+        openContactsPage();
+        initContactModification(contact);
+        fillContactForm(modifiedContact);
+        submitContactModification();
+        returnToHomePage();
+    }
+
     private void confirmRemoval() {
         manager.driver.switchTo().alert().accept();
     }
@@ -90,5 +98,13 @@ public class ContactHelper extends HelperBase {
             );
         }
         return  contacts;
+    }
+
+    private void submitContactModification() {
+        click(By.name("update"));
+    }
+
+    private void initContactModification(ContactData contact) {
+        click(By.xpath(String.format("//a[@href='edit.php?id=%s']", contact.id())));
     }
 }
