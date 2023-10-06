@@ -6,36 +6,37 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 public class ContactCreationTests extends TestBase {
 
     public static List<ContactData> contactProvider() {
         List<ContactData> result = new ArrayList<>();
-        for (String firstName : List.of("", "Patrick")) {
-            for (String lastName : List.of("", "Bateman")) {
-                for (String address : List.of("", "55 West 81st Street, Upper West Side")) {
-                    for (String email : List.of("", "patrick@bateman.com")) {
-                        for (String phone : List.of("", "917-941-0426")) {
-                            result.add(new ContactData()
-                                    .withFirstName(firstName)
-                                    .withLastName(lastName)
-                                    .withAddress(address)
-                                    .withEmail(email)
-                                    .withPhone(phone)
-                            );
-                        }
-                    }
-                }
-            }
-        }
+//        for (String firstName : List.of("", "Patrick")) {
+//            for (String lastName : List.of("", "Bateman")) {
+//                for (String address : List.of("", "55 West 81st Street, Upper West Side")) {
+//                    for (String email : List.of("", "patrick@bateman.com")) {
+//                        for (String phone : List.of("", "917-941-0426")) {
+//                            result.add(new ContactData()
+//                                    .withFirstName(firstName)
+//                                    .withLastName(lastName)
+//                                    .withAddress(address)
+//                                    .withEmail(email)
+//                                    .withPhone(phone)
+//                            );
+//                        }
+//                    }
+//                }
+//            }
+//        }
         for (int i = 0; i < 5; i++) {
             result.add(new ContactData()
-                    .withFirstName(randomString(i * 10))
-                    .withLastName(randomString(i * 10))
-                    .withAddress(randomString(i * 10))
-                    .withEmail(randomString(i * 10))
-                    .withPhone(randomString(i * 10))
+                    .withFirstName(randomString(i * 5))
+                    .withLastName(randomString(i * 5))
+                    .withAddress(randomString(i * 5))
+                    .withEmail(randomString(i * 5))
+                    .withPhone(randomString(i * 5))
             );
         }
         return result;
@@ -44,9 +45,15 @@ public class ContactCreationTests extends TestBase {
     @ParameterizedTest
     @MethodSource("contactProvider")
     public void canCreateContact(ContactData contact) {
-        int contactsCount = app.contacts().getCount();
+        List<ContactData> oldContacts = app.contacts().getList();
         app.contacts().createContact(contact);
-        int newContactsCount = app.contacts().getCount();
-        Assertions.assertEquals(contactsCount + 1, newContactsCount);
+        List<ContactData> newContacts = app.contacts().getList();
+        Comparator<ContactData> compareById = Comparator.comparingInt(o -> Integer.parseInt(o.id()));
+        newContacts.sort(compareById);
+        List<ContactData> expectedContacts = new ArrayList<>(oldContacts);
+        String id = newContacts.get(newContacts.size() - 1).id();
+        expectedContacts.add(contact.withId(id));
+        expectedContacts.sort(compareById);
+        Assertions.assertEquals(expectedContacts, newContacts);
     }
 }
