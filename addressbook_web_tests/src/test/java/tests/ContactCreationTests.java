@@ -37,6 +37,7 @@ public class ContactCreationTests extends TestBase {
                     .withAddress(randomString(i * 5))
                     .withEmail(randomString(i * 5))
                     .withPhone(randomString(i * 5))
+                    .withPhoto("src/test/resources/images/bateman.jpg")
             );
         }
         return result;
