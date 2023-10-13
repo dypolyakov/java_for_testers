@@ -1,5 +1,6 @@
 package tests;
 
+import common.CommonFunctions;
 import model.ContactData;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -15,22 +16,22 @@ public class ContactModificationTests extends TestBase {
     public void canModifyContact() {
         if (app.contacts().getCount() == 0) {
             app.contacts().createContact(new ContactData()
-                    .withFirstName(randomString(5))
-                    .withLastName(randomString(5))
-                    .withAddress(randomString(5))
-                    .withEmail(randomString(5))
-                    .withPhone(randomString(5))
+                    .withFirstName(CommonFunctions.randomString(5))
+                    .withLastName(CommonFunctions.randomString(5))
+                    .withAddress(CommonFunctions.randomString(5))
+                    .withEmail(CommonFunctions.randomString(5))
+                    .withPhone(CommonFunctions.randomString(5))
             );
         }
 
         List<ContactData> oldContacts = app.contacts().getList();
         int index = new Random().nextInt(oldContacts.size());
         ContactData modifiedContact = new ContactData()
-                .withFirstName(randomString(5))
-                .withLastName(randomString(5))
-                .withAddress(randomString(5))
-                .withEmail(randomString(5))
-                .withPhone(randomString(5));
+                .withFirstName(CommonFunctions.randomString(5))
+                .withLastName(CommonFunctions.randomString(5))
+                .withAddress(CommonFunctions.randomString(5))
+                .withEmail(CommonFunctions.randomString(5))
+                .withPhone(CommonFunctions.randomString(5));
 
         app.contacts().modifyContact(oldContacts.get(index), modifiedContact);
         List<ContactData> newContacts = app.contacts().getList();
