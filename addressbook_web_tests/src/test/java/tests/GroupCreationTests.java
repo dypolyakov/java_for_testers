@@ -1,33 +1,33 @@
 package tests;
 
-import common.CommonFunctions;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import model.GroupData;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
 public class GroupCreationTests extends TestBase {
 
-    public static List<GroupData> GroupProvider() {
+    public static List<GroupData> GroupProvider() throws IOException {
         List<GroupData> result = new ArrayList<>();
-        for (String name : List.of("", "group name")) {
-            for (String header : List.of("", "group header")) {
-                for (String footer : List.of("", "group footer")) {
-                    result.add(new GroupData().withName(name).withHeader(header).withFooter(footer));
-                }
-            }
-        }
-        for (int i = 0; i < 5; i++) {
-            result.add(new GroupData()
-                    .withName(CommonFunctions.randomString(i * 10))
-                    .withHeader(CommonFunctions.randomString(i * 10))
-                    .withFooter(CommonFunctions.randomString(i * 10))
-            );
-        }
+//        for (String name : List.of("", "group name")) {
+//            for (String header : List.of("", "group header")) {
+//                for (String footer : List.of("", "group footer")) {
+//                    result.add(new GroupData().withName(name).withHeader(header).withFooter(footer));
+//                }
+//            }
+//        }
+        ObjectMapper mapper = new ObjectMapper();
+        List<GroupData> value = mapper.readValue(new File("groups.json"), new TypeReference<List<GroupData>>() {
+        });
+        result.addAll(value);
         return result;
     }
 
