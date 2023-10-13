@@ -41,7 +41,8 @@ public class GroupCreationTests extends TestBase {
 
         ObjectMapper mapper = new ObjectMapper();
 //        List<GroupData> value = mapper.readValue(new File("groups.json"), new TypeReference<List<GroupData>>() {});
-        List<GroupData> value = mapper.readValue(json, new TypeReference<List<GroupData>>() {});
+        List<GroupData> value = mapper.readValue(json, new TypeReference<>() {
+        });
         result.addAll(value);
         return result;
     }
