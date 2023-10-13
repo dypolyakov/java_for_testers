@@ -21,26 +21,16 @@ public class GroupCreationTests extends TestBase {
 
     public static List<GroupData> GroupProvider() throws IOException {
         List<GroupData> result = new ArrayList<>();
-//        for (String name : List.of("", "group name")) {
-//            for (String header : List.of("", "group header")) {
-//                for (String footer : List.of("", "group footer")) {
-//                    result.add(new GroupData().withName(name).withHeader(header).withFooter(footer));
-//                }
-//            }
-//        }
-//        StringBuilder json = new StringBuilder();
-//        try (FileReader fileReader = new FileReader("groups.json");
-//             BufferedReader bufferedReader = new BufferedReader(fileReader)) {
-//            String line = bufferedReader.readLine();
-//            while (line != null) {
-//                json.append(line);
-//                line = bufferedReader.readLine();
-//            }
-//        }
+        for (String name : List.of("", "group name")) {
+            for (String header : List.of("", "group header")) {
+                for (String footer : List.of("", "group footer")) {
+                    result.add(new GroupData().withName(name).withHeader(header).withFooter(footer));
+                }
+            }
+        }
         String json = Files.readString(Paths.get("groups.json"));
 
         ObjectMapper mapper = new ObjectMapper();
-//        List<GroupData> value = mapper.readValue(new File("groups.json"), new TypeReference<List<GroupData>>() {});
         List<GroupData> value = mapper.readValue(json, new TypeReference<>() {
         });
         result.addAll(value);
