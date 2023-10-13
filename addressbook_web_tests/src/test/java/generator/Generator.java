@@ -8,6 +8,7 @@ import common.CommonFunctions;
 import model.GroupData;
 
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -71,16 +72,15 @@ public class Generator {
 
     private void save(Object data) throws IOException {
         if (format.equals("json")) {
-            // Создание маппера для сериализации
             ObjectMapper mapper = new ObjectMapper();
 
-            // Включение режима pretty print
             mapper.enable(SerializationFeature.INDENT_OUTPUT);
-
-            // Создание json файла
-            // output - название файла заданное в аргументах,
-            // data - класс или список классов, которые будут сериализованы (преобразованы в json формат)
             mapper.writeValue(new File(output), data);
+//            String json = mapper.writeValueAsString(data);
+
+//            try (FileWriter writer = new FileWriter(output)) {
+//                writer.write(json);
+//            }
         } else {
             throw new IllegalArgumentException("Неизвестный формат данных " + format);
         }

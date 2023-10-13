@@ -7,8 +7,12 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileReader;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -24,9 +28,20 @@ public class GroupCreationTests extends TestBase {
 //                }
 //            }
 //        }
+//        StringBuilder json = new StringBuilder();
+//        try (FileReader fileReader = new FileReader("groups.json");
+//             BufferedReader bufferedReader = new BufferedReader(fileReader)) {
+//            String line = bufferedReader.readLine();
+//            while (line != null) {
+//                json.append(line);
+//                line = bufferedReader.readLine();
+//            }
+//        }
+        String json = Files.readString(Paths.get("groups.json"));
+
         ObjectMapper mapper = new ObjectMapper();
-        List<GroupData> value = mapper.readValue(new File("groups.json"), new TypeReference<List<GroupData>>() {
-        });
+//        List<GroupData> value = mapper.readValue(new File("groups.json"), new TypeReference<List<GroupData>>() {});
+        List<GroupData> value = mapper.readValue(json, new TypeReference<List<GroupData>>() {});
         result.addAll(value);
         return result;
     }
