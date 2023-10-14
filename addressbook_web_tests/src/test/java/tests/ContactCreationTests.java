@@ -33,7 +33,7 @@ public class ContactCreationTests extends TestBase {
         newContacts.sort(compareById);
         List<ContactData> expectedContacts = new ArrayList<>(oldContacts);
         String id = newContacts.get(newContacts.size() - 1).id();
-        expectedContacts.add(contact.withId(id));
+        expectedContacts.add(contact.withId(id).withPhoto(""));
         expectedContacts.sort(compareById);
         Assertions.assertEquals(expectedContacts, newContacts);
     }
