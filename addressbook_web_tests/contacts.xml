@@ -1,0 +1,29 @@
+<ArrayList>
+  <item>
+    <id></id>
+    <firstName></firstName>
+    <lastName></lastName>
+    <address></address>
+    <email></email>
+    <phone></phone>
+    <photo>src/test/resources/images/bateman.jpg</photo>
+  </item>
+  <item>
+    <id></id>
+    <firstName>sapuq</firstName>
+    <lastName>zzcmu</lastName>
+    <address>eghdf</address>
+    <email>juxxx</email>
+    <phone>imyqz</phone>
+    <photo>src/test/resources/images/white.jpg</photo>
+  </item>
+  <item>
+    <id></id>
+    <firstName>xxvbffcjzl</firstName>
+    <lastName>pahakzmtle</lastName>
+    <address>scvvwakxzm</address>
+    <email>jyswufxllr</email>
+    <phone>rqgplrouqk</phone>
+    <photo>src/test/resources/images/bateman.jpg</photo>
+  </item>
+</ArrayList>
