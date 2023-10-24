@@ -2,8 +2,11 @@ package tests;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import common.CommonFunctions;
 import model.ContactData;
+import model.GroupData;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 
@@ -36,5 +39,19 @@ public class ContactCreationTests extends TestBase {
         expectedContacts.add(contact.withId(id).withPhoto(""));
         expectedContacts.sort(compareById);
         Assertions.assertEquals(expectedContacts, newContacts);
+    }
+
+    @Test
+    public void canCreateContactInGroup() {
+        ContactData contact = new ContactData().withFirstName(CommonFunctions.randomString(10));
+        if (app.hbm().getGroupCount() == 0) {
+            app.hbm().createGroup(new GroupData().withName("Name").withHeader("Header").withFooter("Footer"));
+        }
+        GroupData group = app.hbm().getGroupList().get(0);
+
+        List<ContactData> oldRelated = app.hbm().getContactsInGroup(group);
+        app.contacts().createContact(contact, group);
+        List<ContactData> newRelated = app.hbm().getContactsInGroup(group);
+        Assertions.assertEquals(oldRelated.size() + 1, newRelated.size());
     }
 }
