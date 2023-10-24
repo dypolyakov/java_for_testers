@@ -2,6 +2,7 @@ package tests;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import common.CommonFunctions;
 import model.GroupData;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -40,16 +41,26 @@ public class GroupCreationTests extends TestBase {
         ));
     }
 
+    public static List<GroupData> singleRandomGroupProvider() {
+        return new ArrayList<>(List.of(
+                new GroupData()
+                        .withName(CommonFunctions.randomString(10))
+                        .withHeader(CommonFunctions.randomString(10))
+                        .withFooter(CommonFunctions.randomString(10))
+        ));
+    }
+
     @ParameterizedTest
-    @MethodSource("GroupProvider")
-    public void canCreateMultipleGroups(GroupData group) {
-        List<GroupData> oldGroups = app.groups().getList();
+    @MethodSource("singleRandomGroupProvider")
+    public void canCreateGroup(GroupData group) {
+        List<GroupData> oldGroups = app.jdbc().getGroupList();
         app.groups().createGroup(group);
-        List<GroupData> newGroups = app.groups().getList();
+        List<GroupData> newGroups = app.jdbc().getGroupList();
         Comparator<GroupData> compareById = Comparator.comparingInt(o -> Integer.parseInt(o.id()));
         newGroups.sort(compareById);
         List<GroupData> expectedGroups = new ArrayList<>(oldGroups);
-        expectedGroups.add(group.withId(newGroups.get((newGroups.size()) - 1).id()).withHeader("").withFooter(""));
+        String maxId = newGroups.get((newGroups.size()) - 1).id();
+        expectedGroups.add(group.withId(maxId));
         expectedGroups.sort(compareById);
         Assertions.assertEquals(expectedGroups, newGroups);
     }
