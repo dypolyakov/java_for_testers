@@ -22,8 +22,7 @@ public class ContactCreationTests extends TestBase {
     public static List<ContactData> contactProvider() throws IOException {
         String json = Files.readString(Paths.get("contacts.json"));
         ObjectMapper mapper = new ObjectMapper();
-        List<ContactData> result = mapper.readValue(json, new TypeReference<>() {});
-        return result;
+        return mapper.readValue(json, new TypeReference<>() {});
     }
 
     @ParameterizedTest
@@ -45,13 +44,18 @@ public class ContactCreationTests extends TestBase {
     public void canCreateContactInGroup() {
         ContactData contact = new ContactData().withFirstName(CommonFunctions.randomString(10));
         if (app.hbm().getGroupCount() == 0) {
-            app.hbm().createGroup(new GroupData().withName("Name").withHeader("Header").withFooter("Footer"));
+            app.hbm().createGroup(CommonFunctions.randomGroup());
         }
         GroupData group = app.hbm().getGroupList().get(0);
-
         List<ContactData> oldRelated = app.hbm().getContactsInGroup(group);
         app.contacts().createContact(contact, group);
         List<ContactData> newRelated = app.hbm().getContactsInGroup(group);
-        Assertions.assertEquals(oldRelated.size() + 1, newRelated.size());
+        Comparator<ContactData> compareById = Comparator.comparingInt(o -> Integer.parseInt(o.id()));
+        newRelated.sort(compareById);
+        List<ContactData> expectedRelated = new ArrayList<>(oldRelated);
+        String id = newRelated.get(newRelated.size() - 1).id();
+        expectedRelated.add(contact.withId(id).withPhoto(""));
+        expectedRelated.sort(compareById);
+        Assertions.assertEquals(expectedRelated, newRelated);
     }
 }

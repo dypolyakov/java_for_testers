@@ -42,12 +42,7 @@ public class GroupCreationTests extends TestBase {
     }
 
     public static List<GroupData> singleRandomGroupProvider() {
-        return new ArrayList<>(List.of(
-                new GroupData()
-                        .withName(CommonFunctions.randomString(10))
-                        .withHeader(CommonFunctions.randomString(10))
-                        .withFooter(CommonFunctions.randomString(10))
-        ));
+        return new ArrayList<>(List.of(CommonFunctions.randomGroup()));
     }
 
     @ParameterizedTest

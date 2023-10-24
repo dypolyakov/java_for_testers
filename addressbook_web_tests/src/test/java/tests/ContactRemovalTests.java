@@ -1,6 +1,8 @@
 package tests;
 
+import common.CommonFunctions;
 import model.ContactData;
+import model.GroupData;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -13,13 +15,7 @@ public class ContactRemovalTests extends TestBase {
     @Test
     public void canRemoveContact() {
         if (app.hbm().getContactCount() == 0) {
-            app.hbm().createContact(new ContactData()
-                    .withFirstName("For removal")
-                    .withLastName("For removal")
-                    .withAddress("For removal")
-                    .withEmail("For removal")
-                    .withPhone("For removal")
-            );
+            app.hbm().createContact(CommonFunctions.randomContact());
             app.contacts().refreshPage();
         }
         List<ContactData> oldContacts = app.hbm().getContactList();
@@ -30,4 +26,33 @@ public class ContactRemovalTests extends TestBase {
         expectedContacts.remove(index);
         Assertions.assertEquals(expectedContacts, newContacts);
     }
+
+    @Test
+    public void canRemoveContactFromGroup() {
+        if (app.jdbc().getGroupListWithContacts().isEmpty()) {
+            if (app.hbm().getGroupCount() == 0) {
+                app.groups().createGroup(CommonFunctions.randomGroup());
+            }
+            if (app.hbm().getContactCount() == 0) {
+                ContactData contact = CommonFunctions.randomContact();
+                GroupData group = app.hbm().getGroupList().get(0);
+                app.contacts().createContact(contact, group);
+            } else {
+                ContactData contact = app.hbm().getContactList().get(0);
+                GroupData group = app.hbm().getGroupList().get(0);
+                app.contacts().addToGroup(contact,group);
+            }
+        }
+
+        GroupData group = app.jdbc().getGroupListWithContacts().get(0);
+        List<ContactData> oldRelated = app.hbm().getContactsInGroup(group);
+        int index = new Random().nextInt(oldRelated.size());
+        ContactData contact = oldRelated.get(index);
+        app.contacts().removeContactFromGroup(contact, group);
+        List<ContactData> newRelated = app.hbm().getContactsInGroup(group);
+        List<ContactData> expectedRelated = new ArrayList<>(oldRelated);
+        expectedRelated.remove(index);
+        Assertions.assertEquals(expectedRelated, newRelated);
+    }
+
 }
