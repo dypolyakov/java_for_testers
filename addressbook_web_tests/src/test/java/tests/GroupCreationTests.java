@@ -53,9 +53,9 @@ public class GroupCreationTests extends TestBase {
     @ParameterizedTest
     @MethodSource("singleRandomGroupProvider")
     public void canCreateGroup(GroupData group) {
-        List<GroupData> oldGroups = app.jdbc().getGroupList();
+        List<GroupData> oldGroups = app.hbm().getGroupList();
         app.groups().createGroup(group);
-        List<GroupData> newGroups = app.jdbc().getGroupList();
+        List<GroupData> newGroups = app.hbm().getGroupList();
         Comparator<GroupData> compareById = Comparator.comparingInt(o -> Integer.parseInt(o.id()));
         newGroups.sort(compareById);
         List<GroupData> expectedGroups = new ArrayList<>(oldGroups);
