@@ -13,14 +13,14 @@ public class GroupModificationTests extends TestBase {
 
     @Test
     public void canModifyGroup() {
-        if (app.groups().getCount() == 0) {
-            app.groups().createGroup(new GroupData().withName("Name").withHeader("Header").withFooter("Footer"));
+        if (app.hbm().getGroupCount() == 0) {
+            app.hbm().createGroup(new GroupData().withName("Name").withHeader("Header").withFooter("Footer"));
         }
-        List<GroupData> oldGroups = app.groups().getList();
+        List<GroupData> oldGroups = app.hbm().getGroupList();
         int index = new Random().nextInt(oldGroups.size());
         GroupData modifiedGroup = new GroupData().withName("Modified Group Name");
         app.groups().modifyGroup(oldGroups.get(index), modifiedGroup);
-        List<GroupData> newGroups = app.groups().getList();
+        List<GroupData> newGroups = app.hbm().getGroupList();
         List<GroupData> expectedGroups = new ArrayList<>(oldGroups);
         expectedGroups.set(index, modifiedGroup.withId(oldGroups.get(index).id()));
         Comparator<GroupData> compareById = Comparator.comparingInt(o -> Integer.parseInt(o.id()));

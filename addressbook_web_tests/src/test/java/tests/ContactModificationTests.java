@@ -14,7 +14,7 @@ public class ContactModificationTests extends TestBase {
 
     @Test
     public void canModifyContact() {
-        if (app.contacts().getCount() == 0) {
+        if (app.hbm().getContactCount() == 0) {
             app.contacts().createContact(new ContactData()
                     .withFirstName(CommonFunctions.randomString(5))
                     .withLastName(CommonFunctions.randomString(5))
@@ -24,7 +24,7 @@ public class ContactModificationTests extends TestBase {
             );
         }
 
-        List<ContactData> oldContacts = app.contacts().getList();
+        List<ContactData> oldContacts = app.hbm().getContactList();
         int index = new Random().nextInt(oldContacts.size());
         ContactData modifiedContact = new ContactData()
                 .withFirstName(CommonFunctions.randomString(5))
@@ -34,7 +34,7 @@ public class ContactModificationTests extends TestBase {
                 .withPhone(CommonFunctions.randomString(5));
 
         app.contacts().modifyContact(oldContacts.get(index), modifiedContact);
-        List<ContactData> newContacts = app.contacts().getList();
+        List<ContactData> newContacts = app.hbm().getContactList();
         List<ContactData> expectedContacts = new ArrayList<>(oldContacts);
         expectedContacts.set(index, modifiedContact.withId(oldContacts.get(index).id()));
         Comparator<ContactData> compareById = Comparator.comparingInt(o -> Integer.parseInt(o.id()));

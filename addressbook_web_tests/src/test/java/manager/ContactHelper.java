@@ -41,11 +41,11 @@ public class ContactHelper extends HelperBase {
         click(By.linkText("add new"));
     }
 
-    private void openContactsPage() {
-        if (!manager.isElementPresent(By.id("maintable"))) {
-            click(By.linkText("home"));
-        }
+private void openContactsPage() {
+    if (!manager.isElementPresent(By.id("maintable"))) {
+        click(By.linkText("home"));
     }
+}
 
     public void removeContact(ContactData contact) {
         openContactsPage();
@@ -107,5 +107,9 @@ public class ContactHelper extends HelperBase {
 
     private void initContactModification(ContactData contact) {
         click(By.xpath(String.format("//a[@href='edit.php?id=%s']", contact.id())));
+    }
+
+    public void refreshPage() {
+        click(By.linkText("home"));
     }
 }

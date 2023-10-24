@@ -26,9 +26,9 @@ public class ContactCreationTests extends TestBase {
     @ParameterizedTest
     @MethodSource("contactProvider")
     public void canCreateContact(ContactData contact) {
-        List<ContactData> oldContacts = app.contacts().getList();
+        List<ContactData> oldContacts = app.hbm().getContactList();
         app.contacts().createContact(contact);
-        List<ContactData> newContacts = app.contacts().getList();
+        List<ContactData> newContacts = app.hbm().getContactList();
         Comparator<ContactData> compareById = Comparator.comparingInt(o -> Integer.parseInt(o.id()));
         newContacts.sort(compareById);
         List<ContactData> expectedContacts = new ArrayList<>(oldContacts);
