@@ -12,8 +12,9 @@ import model.GroupData;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.function.Supplier;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class Generator {
 
@@ -56,31 +57,26 @@ public class Generator {
         }
     }
 
-    private Object generateContacts() {
-        List<ContactData> contacts = new ArrayList<>();
-        for (int i = 0; i < count; i++) {
-            contacts.add(new ContactData()
-                    .withFirstName(CommonFunctions.randomString(i * 5))
-                    .withLastName(CommonFunctions.randomString(i * 5))
-                    .withAddress(CommonFunctions.randomString(i * 5))
-                    .withEmail(CommonFunctions.randomString(i * 5))
-                    .withPhone(CommonFunctions.randomString(i * 5))
-                    .withPhoto(CommonFunctions.randomFile("src/test/resources/images"))
-            );
-        }
-        return contacts;
+    private Object generateData(Supplier<Object> dataSupplier) {
+        return Stream.generate(dataSupplier).limit(count).collect(Collectors.toList());
     }
 
     private Object generateGroups() {
-        List<GroupData> groups = new ArrayList<>();
-        for (int i = 0; i < count; i++) {
-            groups.add(new GroupData()
-                    .withName(CommonFunctions.randomString(i * 10))
-                    .withHeader(CommonFunctions.randomString(i * 10))
-                    .withFooter(CommonFunctions.randomString(i * 10))
-            );
-        }
-        return groups;
+        return generateData(() -> new GroupData()
+                .withName(CommonFunctions.randomString(10))
+                .withHeader(CommonFunctions.randomString(10))
+                .withFooter(CommonFunctions.randomString(10))
+        );
+    }
+
+    private Object generateContacts() {
+        return generateData(() -> new ContactData()
+                .withFirstName(CommonFunctions.randomString(5))
+                .withLastName(CommonFunctions.randomString(5))
+                .withAddress(CommonFunctions.randomString(5))
+                .withEmail(CommonFunctions.randomString(5))
+                .withPhone(CommonFunctions.randomString(5))
+                .withPhoto(CommonFunctions.randomFile("src/test/resources/images")));
     }
 
     private void save(Object data) throws IOException {

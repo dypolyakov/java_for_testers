@@ -14,6 +14,8 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.function.Supplier;
+import java.util.stream.Stream;
 
 public class GroupCreationTests extends TestBase {
 
@@ -41,8 +43,9 @@ public class GroupCreationTests extends TestBase {
         ));
     }
 
-    public static List<GroupData> singleRandomGroupProvider() {
-        return new ArrayList<>(List.of(CommonFunctions.randomGroup()));
+    public static Stream<GroupData> singleRandomGroupProvider() {
+        Supplier<GroupData> randomGroup = CommonFunctions::randomGroup;
+        return Stream.generate(randomGroup).limit(3);
     }
 
     @ParameterizedTest

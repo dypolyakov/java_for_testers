@@ -4,8 +4,8 @@ import model.GroupData;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class GroupHelper extends HelperBase {
 
@@ -96,13 +96,13 @@ public class GroupHelper extends HelperBase {
 
     public List<GroupData> getList() {
         openGroupsPage();
-        List<GroupData> groups = new ArrayList<>();
         List<WebElement> elements = manager.driver.findElements(By.className("group"));
-        for (WebElement element: elements) {
-            String id = element.findElement(By.name("selected[]")).getAttribute("value");
-            String name = element.getText();
-            groups.add(new GroupData().withId(id).withName(name));
-        }
-        return groups;
+        return elements.stream()
+                .map(element -> {
+                    String id = element.findElement(By.name("selected[]")).getAttribute("value");
+                    String name = element.getText();
+                    return new GroupData().withId(id).withName(name);
+                })
+                .collect(Collectors.toList());
     }
 }
