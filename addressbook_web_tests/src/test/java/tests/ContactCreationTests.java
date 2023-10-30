@@ -58,4 +58,52 @@ public class ContactCreationTests extends TestBase {
         expectedRelated.sort(compareById);
         Assertions.assertEquals(expectedRelated, newRelated);
     }
+
+    @Test
+    public void canAddContactInGroup() {
+        // Если групп нет, то создать группу
+        if (app.hbm().getGroupCount() == 0) {
+            app.hbm().createGroup(CommonFunctions.randomGroup());
+        }
+        // Если контактов нет, то создать контакт
+        if (app.hbm().getContactCount() == 0) {
+            app.hbm().createContact(new ContactData().withFirstName(CommonFunctions.randomString(10)));
+        }
+        // Получить список групп и контактов
+        List<GroupData> groups = app.hbm().getGroupList();
+        List<ContactData> contacts = app.hbm().getContactList();
+
+        GroupData groupToAdd = groups.get(0);
+        ContactData contactToAdd = null;
+
+        // Поиск группы, в которую можно добавить контакт и контакта, который можно добавить в эту группу
+        for (GroupData group : groups) {
+            List<ContactData> contactsInGroup = app.hbm().getContactsInGroup(group);
+            if (contactsInGroup.size() < contacts.size()) {
+                contacts.removeAll(contactsInGroup);
+                contactToAdd = contacts.get(0);
+                groupToAdd = group;
+                break;
+            }
+        }
+
+        // Если нет контакта, который можно добавить в существующие группы, то создаем такой контакт
+        if (contactToAdd == null) {
+            app.hbm().createContact(new ContactData().withFirstName(CommonFunctions.randomString(10)));
+            List<ContactData> newContacts = app.hbm().getContactList();
+            newContacts.removeAll(contacts);
+            contactToAdd = newContacts.get(0);
+        }
+
+        List<ContactData> oldRelated = app.hbm().getContactsInGroup(groupToAdd);
+        app.contacts().addToGroup(contactToAdd, groupToAdd);
+        List<ContactData> newRelated = app.hbm().getContactsInGroup(groupToAdd);
+        Comparator<ContactData> compareById = Comparator.comparingInt(o -> Integer.parseInt(o.id()));
+        newRelated.sort(compareById);
+        List<ContactData> expectedRelated = new ArrayList<>(oldRelated);
+        String id = newRelated.get(newRelated.size() - 1).id();
+        expectedRelated.add(contactToAdd.withId(id).withPhoto(""));
+        expectedRelated.sort(compareById);
+        Assertions.assertEquals(expectedRelated, newRelated);
+    }
 }
