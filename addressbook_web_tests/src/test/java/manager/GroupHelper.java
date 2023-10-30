@@ -89,10 +89,9 @@ public class GroupHelper extends HelperBase {
     }
 
     private void selectAllGroups() {
-        List<WebElement> checkBoxes = manager.driver.findElements(By.name("selected[]"));
-        for (WebElement checkbox : checkBoxes) {
-            checkbox.click();
-        }
+        manager.driver
+                .findElements(By.name("selected[]"))
+                .forEach(WebElement::click);
     }
 
     public List<GroupData> getList() {
