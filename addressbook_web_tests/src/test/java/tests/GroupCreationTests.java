@@ -12,8 +12,8 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
+import java.util.Set;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
 
@@ -43,24 +43,22 @@ public class GroupCreationTests extends TestBase {
         ));
     }
 
-    public static Stream<GroupData> singleRandomGroupProvider() {
+    public static Stream<GroupData> randomGroupsProvider() {
         Supplier<GroupData> randomGroup = CommonFunctions::randomGroup;
         return Stream.generate(randomGroup).limit(3);
     }
 
     @ParameterizedTest
-    @MethodSource("singleRandomGroupProvider")
+    @MethodSource("randomGroupsProvider")
     public void canCreateGroup(GroupData group) {
         List<GroupData> oldGroups = app.hbm().getGroupList();
         app.groups().createGroup(group);
         List<GroupData> newGroups = app.hbm().getGroupList();
-        Comparator<GroupData> compareById = Comparator.comparingInt(o -> Integer.parseInt(o.id()));
-        newGroups.sort(compareById);
         List<GroupData> expectedGroups = new ArrayList<>(oldGroups);
-        String maxId = newGroups.get((newGroups.size()) - 1).id();
-        expectedGroups.add(group.withId(maxId));
-        expectedGroups.sort(compareById);
-        Assertions.assertEquals(expectedGroups, newGroups);
+        List<GroupData> extraGroups = newGroups.stream().filter(g -> !oldGroups.contains(g)).toList();
+        String newId = extraGroups.get(0).id();
+        expectedGroups.add(group.withId(newId));
+        Assertions.assertEquals(Set.copyOf(expectedGroups), Set.copyOf(newGroups));
     }
 
     @ParameterizedTest
