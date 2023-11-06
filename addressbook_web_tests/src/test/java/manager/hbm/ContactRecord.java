@@ -14,8 +14,10 @@ public class ContactRecord {
     @Column(name = "lastname")
     public String lastName;
     public String address;
+    public String address2;
     public String email;
-    @Column(name = "home")
+    public String email2;
+    public String email3;
     public String home;
     public String mobile;
     public String work;
@@ -35,8 +37,8 @@ public class ContactRecord {
 //    public String mobile = "";
 //    public String work = "";
     public String fax = "";
-    public String email2 = "";
-    public String email3 = "";
+//    public String email2 = "";
+//    public String email3 = "";
     public String im = "";
     public String im2 = "";
     public String im3 = "";
@@ -47,8 +49,9 @@ public class ContactRecord {
     public int aday = 0;
     public String amonth = "";
     public String ayear = "";
-    public String address2 = "";
-//    public String phone2 = "";
+//    public String address2 = "";
+//    @Column(name = "phone2")
+//    public String secondary = "";
     public String notes = "";
     public ContactRecord() {
     }
