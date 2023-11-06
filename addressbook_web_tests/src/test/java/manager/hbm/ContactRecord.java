@@ -2,7 +2,6 @@ package manager.hbm;
 
 import jakarta.persistence.*;
 
-import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -17,7 +16,11 @@ public class ContactRecord {
     public String address;
     public String email;
     @Column(name = "home")
-    public String phone;
+    public String home;
+    public String mobile;
+    public String work;
+    @Column(name = "phone2")
+    public String secondary;
 
     @ManyToMany
     @JoinTable(name = "address_in_groups",
@@ -29,8 +32,8 @@ public class ContactRecord {
     public String nickname = "";
     public String company = "";
     public String title = "";
-    public String mobile = "";
-    public String work = "";
+//    public String mobile = "";
+//    public String work = "";
     public String fax = "";
     public String email2 = "";
     public String email3 = "";
@@ -45,17 +48,17 @@ public class ContactRecord {
     public String amonth = "";
     public String ayear = "";
     public String address2 = "";
-    public String phone2 = "";
+//    public String phone2 = "";
     public String notes = "";
     public ContactRecord() {
     }
 
-    public ContactRecord(int id, String firstName, String lastName, String address, String email, String phone) {
+    public ContactRecord(int id, String firstName, String lastName, String address, String email, String home) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
         this.address = address;
         this.email = email;
-        this.phone = phone;
+        this.home = home;
     }
 }

@@ -66,7 +66,7 @@ public class ContactHelper extends HelperBase {
         type(By.name("firstname"), contact.firstName());
         type(By.name("lastname"), contact.lastName());
         type(By.name("address"), contact.address());
-        type(By.name("home"), contact.phone());
+        type(By.name("home"), contact.home());
         type(By.name("email"), contact.email());
         attach(By.name("photo"), contact.photo());
     }
@@ -129,7 +129,7 @@ private void openContactsPage() {
                     .withLastName(lastName)
                     .withAddress(address)
                     .withEmail(email)
-                    .withPhone(phone)
+                    .withHomePhone(phone)
             );
         }
         return  contacts;
@@ -161,5 +161,9 @@ private void openContactsPage() {
 
     private void showContactsInGroup(GroupData group) {
         new Select(manager.driver.findElement(By.name("group"))).selectByValue(group.id());
+    }
+
+    public String getPhones(ContactData contact) {
+        return manager.driver.findElement(By.xpath(String.format("//input[@id='%s']/../../td[6]", contact.id()))).getText();
     }
 }
